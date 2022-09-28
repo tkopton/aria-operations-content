@@ -1,0 +1,62 @@
+{
+   "e66e713a-4900-4a30-9523-beea971265ed": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1663507061520,
+      "name": "tk-Total_Recommended_New_Hosts",
+      "formula": "max([${this, metric=Super Metric|sm_ece7a3df-e5c1-455c-9e29-47d079077430},${this, metric=Super Metric|sm_dce62b50-82b8-4e77-8c0b-4d346e370879}])",
+      "description": "Total (before buffers) recommended number of new hosts.",
+      "unitId": "",
+      "modifiedBy": "b3f19bd7-ec0a-3065-b2e0-8b2a692bcd51"
+   },
+   "801ed9ad-27ac-40e6-9338-962538500a36": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1663507061528,
+      "name": "tk-UCS_B200_M5_RAM_GB",
+      "formula": "4096",
+      "description": "Total GB RAM of a new UCS Blade.",
+      "unitId": "gb",
+      "modifiedBy": "b3f19bd7-ec0a-3065-b2e0-8b2a692bcd51"
+   },
+   "c5f405ff-3d59-4c35-ae33-a1f879ebdfb0": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1663507061532,
+      "name": "tk-UCS_B200_M5_CPU_MHz",
+      "formula": "100800",
+      "description": "Total MHz of a new UCS Blade with UCS-CPU-I6230R",
+      "unitId": "mhz",
+      "modifiedBy": "b3f19bd7-ec0a-3065-b2e0-8b2a692bcd51"
+   },
+   "ece7a3df-e5c1-455c-9e29-47d079077430": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1664361307551,
+      "name": "tk-Total_Recommended_New_Hosts_CPU",
+      "formula": "ceil((${this, metric=OnlineCapacityAnalytics|cpu|demand|recommendedTotalSize})/(${this, metric=Super Metric|sm_c5f405ff-3d59-4c35-ae33-a1f879ebdfb0}))",
+      "description": "Total (before buffers etc.) recommended number of new hosts for a given server model - CPU-wise.",
+      "unitId": "",
+      "modifiedBy": "b3f19bd7-ec0a-3065-b2e0-8b2a692bcd51"
+   },
+   "dce62b50-82b8-4e77-8c0b-4d346e370879": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1664361295781,
+      "name": "tk-Total_Recommended_New_Hosts_RAM",
+      "formula": "ceil(((${this, metric=OnlineCapacityAnalytics|mem|demand|recommendedTotalSize})/1024/1024)/(${this, metric=Super Metric|sm_801ed9ad-27ac-40e6-9338-962538500a36}))",
+      "description": "Total (before buffers etc.) recommended number of new hosts for a given server model - RAM-wise.",
+      "unitId": "",
+      "modifiedBy": "b3f19bd7-ec0a-3065-b2e0-8b2a692bcd51"
+   }
+}
