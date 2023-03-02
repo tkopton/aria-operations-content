@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><alertContent>
+    <SymptomDefinitions>
+        <SymptomDefinition adapterKind="VMWARE" disableInBasePolicy="true" evaluateInRealTime="true" id="SymptomDefinition-1bc185c1-092f-4203-b259-d6e68e7fdf45" name="tk-NoPacketsTransmitted" resourceKind="VirtualMachine">
+            <State severity="info">
+                <Condition key="net:Aggregate of all instances|packetsTxPerSec" operator="=" thresholdType="static" type="metric" value="0.0" valueType="numeric"/>
+            </State>
+        </SymptomDefinition>
+        <SymptomDefinition adapterKind="VMWARE" disableInBasePolicy="true" evaluateInRealTime="true" id="SymptomDefinition-d2b9f2fe-04ee-4bf5-b6ff-6c74af98316e" name="tk-NoDiskThroughput" resourceKind="VirtualMachine">
+            <State severity="info">
+                <Condition key="virtualDisk:Aggregate of all instances|usage" operator="=" thresholdType="static" type="metric" value="0.0" valueType="numeric"/>
+            </State>
+        </SymptomDefinition>
+        <SymptomDefinition adapterKind="VMWARE" disableInBasePolicy="true" evaluateInRealTime="true" id="SymptomDefinition-33044df7-cab7-4f7b-a697-ce3c1956194b" name="tk-NoDiskIOPS" resourceKind="VirtualMachine">
+            <State severity="info">
+                <Condition key="virtualDisk:Aggregate of all instances|commandsAveraged_average" operator="=" thresholdType="static" type="metric" value="0.0" valueType="numeric"/>
+            </State>
+        </SymptomDefinition>
+        <SymptomDefinition adapterKind="VMWARE" disableInBasePolicy="true" evaluateInRealTime="true" id="SymptomDefinition-0774e9c7-02f8-4b83-9dc6-05ec64d0f3b7" name="tk-MAXCPUDemand" resourceKind="VirtualMachine">
+            <State severity="critical">
+                <Condition key="cpu|demandPct" operator="&gt;" thresholdType="static" type="metric" value="99.0" valueType="numeric"/>
+            </State>
+        </SymptomDefinition>
+        <SymptomDefinition adapterKind="VMWARE" disableInBasePolicy="true" evaluateInRealTime="true" id="SymptomDefinition-e58026a0-9df4-47c3-8fec-074704fbe7b4" name="tk-NoPacketsReceived" resourceKind="VirtualMachine">
+            <State severity="info">
+                <Condition key="net:Aggregate of all instances|packetsRxPerSec" operator="=" thresholdType="static" type="metric" value="0.0" valueType="numeric"/>
+            </State>
+        </SymptomDefinition>
+        <SymptomDefinition adapterKind="VMWARE" cancelCycle="4" disableInBasePolicy="true" id="SymptomDefinition-80d347bc-2550-4721-b596-3e81d30bc7e5" name="tk-LowRAMUsage" resourceKind="VirtualMachine" waitCycle="4">
+            <State severity="info">
+                <Condition key="mem|usage_average" operator="&lt;" thresholdType="static" type="metric" value="2.0" valueType="numeric"/>
+            </State>
+        </SymptomDefinition>
+    </SymptomDefinitions>
+</alertContent>
