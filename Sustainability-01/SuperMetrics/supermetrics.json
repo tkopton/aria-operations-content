@@ -1,0 +1,62 @@
+{
+   "4c1a1f9b-055d-4d69-a06f-817050966381": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1681727188122,
+      "name": "tk-MTDClusterEnergyConsumption",
+      "formula": "sum(${adaptertype=VMWARE, objecttype=HostSystem, metric=Custom Metric|MTDEnergyConsumption, depth=1})",
+      "description": "",
+      "unitId": "kwh",
+      "modifiedBy": "c9ec04e1-2e82-4ee0-b069-a4e5cb646b16"
+   },
+   "620fc75a-1974-4f14-9ff5-12d97e8eb5e9": {
+      "resourceKinds": [{
+         "resourceKindKey": "HostSystem",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1682357235226,
+      "name": "tk-MTDHostEnergyPrice",
+      "formula": "${this, metric=Custom Metric|MTDEnergyConsumption} * ${this, metric=CustomProperty|Energy Rate}",
+      "description": "",
+      "unitId": "currency",
+      "modifiedBy": "b3f19bd7-ec0a-3065-b2e0-8b2a692bcd51"
+   },
+   "571a07a5-3534-4a3d-b9b2-193575d6ddc1": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1682349797726,
+      "name": "tk-MTDClusterEnergyPrice",
+      "formula": "(${this, metric=Super Metric|sm_4c1a1f9b-055d-4d69-a06f-817050966381}) * ${this, metric=CustomProperty|Electricity Rate}",
+      "description": "",
+      "unitId": "currency",
+      "modifiedBy": "b3f19bd7-ec0a-3065-b2e0-8b2a692bcd51"
+   },
+   "60739218-eeb4-4bd3-aeac-acbe78e27dc4": {
+      "resourceKinds": [{
+         "resourceKindKey": "Datacenter",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1681727188174,
+      "name": "tk-MTDDatacenterEnergyPrice",
+      "formula": "sum(${adaptertype=VMWARE, objecttype=ClusterComputeResource, metric=Super Metric|sm_571a07a5-3534-4a3d-b9b2-193575d6ddc1, depth=2})",
+      "description": "",
+      "unitId": "currency",
+      "modifiedBy": "c9ec04e1-2e82-4ee0-b069-a4e5cb646b16"
+   },
+   "a0cd5054-0104-4b73-b662-167f9a3fcd77": {
+      "resourceKinds": [{
+         "resourceKindKey": "Datacenter",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1681727188198,
+      "name": "tk-MTDDatacenterEnergyConsumption",
+      "formula": "sum(${adaptertype=VMWARE, objecttype=ClusterComputeResource, metric=Super Metric|sm_4c1a1f9b-055d-4d69-a06f-817050966381, depth=2})",
+      "description": "",
+      "unitId": "kwh",
+      "modifiedBy": "c9ec04e1-2e82-4ee0-b069-a4e5cb646b16"
+   }
+}
