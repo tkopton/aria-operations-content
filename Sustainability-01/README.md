@@ -1,8 +1,10 @@
+# VMware Aria Operations Custom Sustainability Dashboard
+
 This content is related to: https://thomas-kopton.de/vblog/?p=1399
 There are few prerequisites to get the workflows and dashboards up and running after importing all components into VMware Aria Automation Orchestrator and Aria Operations.
 
 
-1. Prerequisites
+## Prerequisites
    
    VMware Aria Automation Orchestrator
    -----------------------------------
@@ -18,6 +20,6 @@ There are few prerequisites to get the workflows and dashboards up and running a
 
    VMware Aria Operations
    ----------------------
-   
 
-2. Installation
+
+## Installation
