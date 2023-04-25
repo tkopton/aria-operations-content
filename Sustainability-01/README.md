@@ -3,8 +3,21 @@ There are few prerequisites to get the workflows and dashboards up and running a
 
 
 1. Prerequisites
+   
+   VMware Aria Automation Orchestrator
+   -----------------------------------
+
    The login procedure the Aria Orchestrator workflows are using to communicate with Aria Operations will be improved in an upcoming version and requires a Configuration element in Orchestrator.
    In my workflow I am using the following structure:
 
+   tk-ops-framework
+   |__accessTokenTTL
+   |__accessToken
+
+   All workflows and actions are using transient REST host and operations, no Inventory configuration required.
+
+   VMware Aria Operations
+   ----------------------
+   
 
 2. Installation
