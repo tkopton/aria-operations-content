@@ -19,5 +19,5 @@ All workflows and actions are using transient REST host and operations, no Inven
 ### VMware Aria Operations
 In VMware Aria Operations following objects need to be created manually:
 - Custom Groups to add Energy Rate custom property
-[![N|Solid](https://github.com/tkopton/aria-operations-content/blob/main/Sustainability-01/custom-group-settings.png)]
+![Custom Group configuration](https://github.com/tkopton/aria-operations-content/blob/main/Sustainability-01/custom-group-settings.png)
 ## Installation
