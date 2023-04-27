@@ -21,3 +21,10 @@ In VMware Aria Operations following objects need to be created manually:
 - Custom Groups to add Energy Rate custom property
 ![Custom Group configuration](https://github.com/tkopton/aria-operations-content/blob/main/Sustainability-01/custom-group-settings.png)
 ## Installation
+The overall order is:
+1. Create your Custom Groups and add the right custom properties
+2. Import the Aria Automation Orchestrator package and configure the attributes to reflect your Aria Operations FQDN
+   * tk-ariaOps-getResourcesBySpecs-agnostic
+   * Look for baseUrl attribute - one of my to do is to make it a variable
+3. Import the Super Metrics and make sure that they are enabled in your policies, make also sure that the Super Metric formula reflects your custom attributes
+4. Import Views and Dashboards
