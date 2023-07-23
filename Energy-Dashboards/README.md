@@ -1,5 +1,5 @@
 # VMware Aria Operations Custom Energy Data Dashboards
-This content is related to: https://thomas-kopton.de/vblog/?p=xxx
+This content is related to: [https://thomas-kopton.de/vblog/?p=1538](https://thomas-kopton.de/vblog/?p=1538)
 
 ## Prerequisites
 There are few prerequisites to get dashboards up and running after importing all content into VMware Aria Operations.
