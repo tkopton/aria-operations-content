@@ -1,0 +1,344 @@
+{
+   "customGroups": [{
+      "resourceKind": "Function",
+      "membershipDefinition": {"ruleGroups": [
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [{
+               "ruleType": "StringMetricPropertyRule",
+               "ruleMetricKey": "summary|version",
+               "isProperty": true,
+               "ruleStringOperator": "CONTAINS",
+               "ruleStringValue": "15843807"
+            }]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "16324942"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "16850804"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "17119627"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "17168206"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "17325020"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "17325551"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "17551050"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "19324898"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "17630552"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "17867351"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "18426014"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "18538813"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "19290878"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "18644231"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "18825058"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "18905247"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "19193900"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "19482537"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "19898904"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "20036589"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [
+               {
+                  "ruleType": "StringMetricPropertyRule",
+                  "ruleMetricKey": "summary|version",
+                  "isProperty": true,
+                  "ruleStringOperator": "CONTAINS",
+                  "ruleStringValue": "20328353"
+               }
+            ]
+         },
+         {
+            "resourceKind": "HostSystem",
+            "adapterKind": "VMWARE",
+            "rules": [{
+               "ruleType": "StringMetricPropertyRule",
+               "ruleMetricKey": "summary|version",
+               "isProperty": true,
+               "ruleStringOperator": "CONTAINS",
+               "ruleStringValue": "20395099"
+            }]
+         }
+      ]},
+      "adapterKind": "Container",
+      "autoResolveMembership": true,
+      "name": "tk-ESXi7x",
+      "description": "All ESXi Host Systems version 7.x",
+      "started": true
+   }],
+   "customGroupTypes": [{
+      "resourceKind": "Function",
+      "localization": [
+         {
+            "resourceKindName": "Funktion",
+            "locale": "de"
+         },
+         {
+            "resourceKindName": "功能",
+            "locale": "zh_TW"
+         },
+         {
+            "resourceKindName": "기능",
+            "locale": "ko"
+         },
+         {
+            "resourceKindName": "機能",
+            "locale": "ja"
+         },
+         {
+            "resourceKindName": "Function",
+            "locale": "en"
+         },
+         {
+            "resourceKindName": "功能",
+            "locale": "zh_CN"
+         },
+         {
+            "resourceKindName": "Fonction",
+            "locale": "fr"
+         },
+         {
+            "resourceKindName": "Función",
+            "locale": "es"
+         }
+      ]
+   }]
+}
