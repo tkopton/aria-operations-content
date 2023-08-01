@@ -3,10 +3,10 @@
       "resourceKindKey": "VirtualMachine",
       "adapterKindKey": "VMWARE"
    }],
-   "modificationTime": 1690888436177,
+   "modificationTime": 1690913694542,
    "name": "tk-monitor-cpu-usage",
    "formula": " floor((avg(${adaptertype=APPOSUCP, objecttype=executescript, metric=scripts|tk-test-monitor01, depth=2}) % pow(10,4) / pow(10,0) / 10))",
    "description": "",
-   "unitId": "",
+   "unitId": "percent",
    "modifiedBy": "f05c933d-778b-45b5-a4a9-ac1c6728e9e6"
 }}
