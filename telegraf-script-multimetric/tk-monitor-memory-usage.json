@@ -1,0 +1,12 @@
+{"6d6d18b2-ddf0-4c60-aec8-4106ed92801d": {
+   "resourceKinds": [{
+      "resourceKindKey": "VirtualMachine",
+      "adapterKindKey": "VMWARE"
+   }],
+   "modificationTime": 1690888425608,
+   "name": "tk-monitor-memory-usage",
+   "formula": " floor((avg(${adaptertype=APPOSUCP, objecttype=executescript, metric=scripts|tk-test-monitor01, depth=2})/pow(10,4)))",
+   "description": "",
+   "unitId": "",
+   "modifiedBy": "f05c933d-778b-45b5-a4a9-ac1c6728e9e6"
+}}

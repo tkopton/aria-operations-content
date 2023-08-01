@@ -1,0 +1,12 @@
+{"80ecf314-63c9-4a09-b75f-add4e1312069": {
+   "resourceKinds": [{
+      "resourceKindKey": "VirtualMachine",
+      "adapterKindKey": "VMWARE"
+   }],
+   "modificationTime": 1690888436177,
+   "name": "tk-monitor-cpu-usage",
+   "formula": " floor((avg(${adaptertype=APPOSUCP, objecttype=executescript, metric=scripts|tk-test-monitor01, depth=2}) % pow(10,4) / pow(10,0) / 10))",
+   "description": "",
+   "unitId": "",
+   "modifiedBy": "f05c933d-778b-45b5-a4a9-ac1c6728e9e6"
+}}
