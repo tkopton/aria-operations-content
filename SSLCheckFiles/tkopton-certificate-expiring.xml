@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><alertContent>
+    <AlertDefinitions>
+        <AlertDefinition adapterKind="EP Ops Adapter" id="AlertDefinition-eca7b93f-fb84-47ba-a694-6ae1ca132e42" name="tkopton - Certificate expring" resourceKind="Script" subType="18" type="15">
+            <State severity="automatic">
+                <SymptomSet applyOn="self" operator="and" ref="SymptomDefinition-252cb3fa-0b28-47c4-86bc-65c2d87245e0"/>
+                <Impact key="risk" type="badge"/>
+            </State>
+        </AlertDefinition>
+    </AlertDefinitions>
+    <SymptomDefinitions>
+        <SymptomDefinition adapterKind="EP Ops Adapter" id="SymptomDefinition-252cb3fa-0b28-47c4-86bc-65c2d87245e0" name="tkopton-certificate expiring" resourceKind="Script">
+            <State severity="warning">
+                <Condition key="UTILIZATION|ResultValue" operator="&lt;" thresholdType="static" type="metric" value="91.0" valueType="numeric"/>
+            </State>
+        </SymptomDefinition>
+    </SymptomDefinitions>
+</alertContent>
