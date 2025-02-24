@@ -16,7 +16,7 @@ datediff() {
   date1_epoch=$1
   date2_epoch=$2
 
-  if(echo $(( (date1_epoch - date2_epoch) / 86400 )) > 0); then
+  if [ $(( (date1_epoch - date2_epoch) / 86400 )) -gt 0 ]; then
     echo $(( (date1_epoch - date2_epoch) / 86400 ))
     exit 0
   else
@@ -24,7 +24,7 @@ datediff() {
   fi
 }
 
-cert_date=$(echo | openssl s_client -servername $1 -connect $1:443 2>/dev/null | openssl x509 -noout -dates | grep notAfter | cut -d= -f2)
+cert_date=$(echo | openssl s_client -servername $1 -connect $1:443 -showcerts 2>/dev/null | openssl x509 -noout -dates | grep notAfter | cut -d= -f2)
 now_date=$(date)
 cert_date_epoch=$(date -d "$cert_date" "+%s")
 now_date_epoch=$(date -d "$now_date" "+%s")
