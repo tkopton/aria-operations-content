@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #A simple script to calcualate the remaining days until a SSL certificate will expire
 
 display_usage() {
@@ -10,7 +9,7 @@ display_usage() {
 
 # Check if an argument is provided
 if [ $# -ne 1 ]; then
-    usage
+    display_usage
 fi
 
 datediff() {
