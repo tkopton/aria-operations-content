@@ -1,0 +1,128 @@
+{
+  "name":"MyNSXUserAuditDashboard",
+  "namespace":"com.vmware.tkopton",
+  "contentPackId":"com.vmware.tkopton",
+  "framework":"#9c4",
+  "version":"2.4",
+  "extractedFields":[ {
+    "displayName":"myNSXAudit",
+    "preContext":"",
+    "postContext":" comp",
+    "regexValue":"\\S+",
+    "internalName":"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqqlvmruxi000",
+    "constraints":"{\"filters\":[{\"hidden\":false,\"internalName\":\"appname\",\"displayName\":\"appname\",\"operator\":\"CONTAINS\",\"value\":\"nsx\",\"fieldType\":\"STRING\",\"isExtracted\":false}]}",
+    "info":null
+  }, {
+    "displayName":"myNSXModuleName",
+    "preContext":"ModuleName=\"",
+    "postContext":"\"\\, Operation",
+    "regexValue":"\\w+",
+    "internalName":"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqtlpmr2wyzkomfwwk000",
+    "constraints":null,
+    "info":null
+  }, {
+    "displayName":"myNSXUserSourceIP",
+    "preContext":"@",
+    "postContext":"\"\\, ModuleName",
+    "regexValue":"\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
+    "internalName":"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqvltmvzfg33vojrwkskq",
+    "constraints":"{\"filters\":[{\"internalName\":\"appname\",\"displayName\":\"appname\",\"operator\":\"CONTAINS\",\"value\":\"nsx\",\"fieldType\":\"STRING\",\"isExtracted\":false,\"hidden\":false}]}",
+    "info":null
+  }, {
+    "displayName":"vmw_nsxt_audit_operation_status",
+    "preContext":"status(?::'|=\")",
+    "postContext":"(?:'|\")",
+    "regexValue":"\\w+",
+    "internalName":"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0",
+    "constraints":"{\"searchTerms\":\"comp subcomp\"}",
+    "info":null
+  }, {
+    "displayName":"vmw_nsxt_operation",
+    "preContext":"Operation(?::'|=\")",
+    "postContext":"(?:'|\")",
+    "regexValue":"\\w+",
+    "internalName":"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000",
+    "constraints":"{\"searchTerms\":\"comp subcomp\"}",
+    "info":null
+  }, {
+    "displayName":"vmw_nsxt_user",
+    "preContext":"UserName(?::'|=\")",
+    "postContext":"(?:'|\")",
+    "regexValue":".+?",
+    "internalName":"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000",
+    "constraints":"{\"searchTerms\":\"comp subcomp\"}",
+    "info":null
+  } ],
+  "queries":[ ],
+  "alerts":[ ],
+  "dashboardSections":[ {
+    "views":[ {
+      "name":"NSX User Actions Audit",
+      "constraints":[ ],
+      "rows":[ {
+        "widgets":[ {
+          "name":"Successful Logins by User",
+          "info":"",
+          "chartType":null,
+          "chartOptions":"{\"logaxis\":false,\"legend\":true,\"stacking\":\"normal\",\"spline\":false}",
+          "widgetType":"chart",
+          "chartQuery":"{\"query\":\"\",\"startTimeMillis\":1742293571111,\"endTimeMillis\":1742297171954,\"piqlFunctionGroups\":[{\"functions\":[{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false}],\"field\":null}],\"dateFilterPreset\":\"CUSTOM\",\"shouldGroupByTime\":true,\"includeAllContentPackFields\":true,\"eventSortOrder\":\"DESC\",\"summarySortOrder\":\"DESC\",\"compareQueryOrderBy\":\"TREND\",\"compareQuerySortOrder\":\"DESC\",\"compareQueryOptions\":null,\"messageViewType\":\"EVENTS\",\"constraintToggle\":\"ALL\",\"piqlFunction\":{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false},\"piqlFunctionField\":null,\"fieldConstraints\":[{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqqlvmruxi000\",\"operator\":\"CONTAINS\",\"value\":\"audit=\\\"true\\\"\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"CONTAINS\",\"value\":\"getcurrentuserinfo\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"operator\":\"CONTAINS\",\"value\":\"success\"}],\"supplementalConstraints\":[],\"groupByFields\":[{\"displayName\":\"vmw_nsxt_user\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"displayNamespace\":\"Unknown\",\"numericGroupByType\":\"EACH_VALUE\",\"numericGroupByValue\":null}],\"contentPacksToIncludeFields\":[],\"extractedFields\":[{\"displayName\":\"vmw_nsxt_audit_operation_status\",\"preContext\":\"status(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_operation\",\"preContext\":\"Operation(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_user\",\"preContext\":\"UserName(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\".+?\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"myNSXAudit\",\"preContext\":\"\",\"postContext\":\" comp\",\"regexValue\":\"\\\\S+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqqlvmruxi000\",\"constraints\":\"{\\\"filters\\\":[{\\\"hidden\\\":false,\\\"internalName\\\":\\\"appname\\\",\\\"displayName\\\":\\\"appname\\\",\\\"operator\\\":\\\"CONTAINS\\\",\\\"value\\\":\\\"nsx\\\",\\\"fieldType\\\":\\\"STRING\\\",\\\"isExtracted\\\":false}]}\"}]}",
+          "messageQuery":""
+        }, {
+          "name":"Logouts by User",
+          "info":"",
+          "chartType":null,
+          "chartOptions":"{\"logaxis\":false,\"legend\":true,\"stacking\":\"normal\",\"spline\":false}",
+          "widgetType":"chart",
+          "chartQuery":"{\"query\":\"\",\"startTimeMillis\":1742296208866,\"endTimeMillis\":1742299809121,\"piqlFunctionGroups\":[{\"functions\":[{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false}],\"field\":null}],\"dateFilterPreset\":\"CUSTOM\",\"shouldGroupByTime\":true,\"includeAllContentPackFields\":true,\"eventSortOrder\":\"DESC\",\"summarySortOrder\":\"DESC\",\"compareQueryOrderBy\":\"TREND\",\"compareQuerySortOrder\":\"DESC\",\"compareQueryOptions\":null,\"messageViewType\":\"EVENTS\",\"constraintToggle\":\"ALL\",\"piqlFunction\":{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false},\"piqlFunctionField\":null,\"fieldConstraints\":[{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"EXISTS\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"CONTAINS\",\"value\":\"logout\"}],\"supplementalConstraints\":[],\"groupByFields\":[{\"displayName\":\"vmw_nsxt_user\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"displayNamespace\":\"Unknown\",\"numericGroupByType\":\"EACH_VALUE\",\"numericGroupByValue\":null}],\"contentPacksToIncludeFields\":[],\"extractedFields\":[{\"displayName\":\"vmw_nsxt_operation\",\"preContext\":\"Operation(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_user\",\"preContext\":\"UserName(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\".+?\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"}]}",
+          "messageQuery":""
+        } ]
+      }, {
+        "widgets":[ {
+          "name":"Failed Logins by User",
+          "info":"",
+          "chartType":null,
+          "chartOptions":"{\"logaxis\":false,\"legend\":true,\"stacking\":\"normal\",\"spline\":false}",
+          "widgetType":"chart",
+          "chartQuery":"{\"query\":\"\",\"startTimeMillis\":1742294211619,\"endTimeMillis\":1742297811632,\"piqlFunctionGroups\":[{\"functions\":[{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false}],\"field\":null}],\"dateFilterPreset\":\"CUSTOM\",\"shouldGroupByTime\":true,\"includeAllContentPackFields\":true,\"eventSortOrder\":\"DESC\",\"summarySortOrder\":\"DESC\",\"compareQueryOrderBy\":\"TREND\",\"compareQuerySortOrder\":\"DESC\",\"compareQueryOptions\":null,\"messageViewType\":\"EVENTS\",\"constraintToggle\":\"ALL\",\"piqlFunction\":{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false},\"piqlFunctionField\":null,\"fieldConstraints\":[{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"CONTAINS\",\"value\":\"login\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"operator\":\"CONTAINS\",\"value\":\"failure\"}],\"supplementalConstraints\":[],\"groupByFields\":[{\"displayName\":\"vmw_nsxt_user\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"displayNamespace\":\"Unknown\",\"numericGroupByType\":\"EACH_VALUE\",\"numericGroupByValue\":null}],\"contentPacksToIncludeFields\":[],\"extractedFields\":[{\"displayName\":\"vmw_nsxt_audit_operation_status\",\"preContext\":\"status(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_operation\",\"preContext\":\"Operation(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_user\",\"preContext\":\"UserName(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\".+?\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"}]}",
+          "messageQuery":""
+        }, {
+          "name":"Failed Logins by Source IP",
+          "info":"",
+          "chartType":null,
+          "chartOptions":"{\"logaxis\":false,\"legend\":true,\"stacking\":\"normal\",\"spline\":false}",
+          "widgetType":"chart",
+          "chartQuery":"{\"query\":\"\",\"startTimeMillis\":1742298713592,\"endTimeMillis\":1742302313591,\"piqlFunctionGroups\":[{\"functions\":[{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false}],\"field\":null}],\"dateFilterPreset\":\"CUSTOM\",\"shouldGroupByTime\":true,\"includeAllContentPackFields\":true,\"eventSortOrder\":\"DESC\",\"summarySortOrder\":\"DESC\",\"compareQueryOrderBy\":\"TREND\",\"compareQuerySortOrder\":\"DESC\",\"compareQueryOptions\":null,\"messageViewType\":\"EVENTS\",\"constraintToggle\":\"ALL\",\"piqlFunction\":{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false},\"piqlFunctionField\":null,\"fieldConstraints\":[{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"CONTAINS\",\"value\":\"login\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"operator\":\"CONTAINS\",\"value\":\"failure\"}],\"supplementalConstraints\":[],\"groupByFields\":[{\"displayName\":\"myNSXUserSourceIP\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqvltmvzfg33vojrwkskq\",\"displayNamespace\":\"Unknown\",\"numericGroupByType\":\"EACH_VALUE\",\"numericGroupByValue\":null}],\"contentPacksToIncludeFields\":[],\"extractedFields\":[{\"displayName\":\"vmw_nsxt_audit_operation_status\",\"preContext\":\"status(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_operation\",\"preContext\":\"Operation(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"myNSXUserSourceIP\",\"preContext\":\"@\",\"postContext\":\"\\\"\\\\, ModuleName\",\"regexValue\":\"\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqvltmvzfg33vojrwkskq\",\"constraints\":\"{\\\"filters\\\":[{\\\"internalName\\\":\\\"appname\\\",\\\"displayName\\\":\\\"appname\\\",\\\"operator\\\":\\\"CONTAINS\\\",\\\"value\\\":\\\"nsx\\\",\\\"fieldType\\\":\\\"STRING\\\",\\\"isExtracted\\\":false,\\\"hidden\\\":false}]}\"}]}",
+          "messageQuery":""
+        } ]
+      }, {
+        "widgets":[ {
+          "name":"Successful Config Operations by User (filtered)",
+          "info":"",
+          "gridWidth":"1/2",
+          "chartType":null,
+          "chartOptions":"{\"logaxis\":false,\"legend\":true,\"stacking\":\"normal\",\"spline\":false}",
+          "widgetType":"chart",
+          "chartQuery":"{\"query\":\"\",\"startTimeMillis\":1742375322142,\"endTimeMillis\":1742378922488,\"piqlFunctionGroups\":[{\"functions\":[{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false}],\"field\":null}],\"dateFilterPreset\":\"CUSTOM\",\"shouldGroupByTime\":true,\"includeAllContentPackFields\":true,\"eventSortOrder\":\"DESC\",\"summarySortOrder\":\"DESC\",\"compareQueryOrderBy\":\"TREND\",\"compareQuerySortOrder\":\"DESC\",\"compareQueryOptions\":null,\"messageViewType\":\"EVENTS\",\"constraintToggle\":\"ALL\",\"piqlFunction\":{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false},\"piqlFunctionField\":null,\"fieldConstraints\":[{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"EXISTS\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"operator\":\"CONTAINS\",\"value\":\"success\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"operator\":\"EXISTS\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqtlpmr2wyzkomfwwk000\",\"operator\":\"EXISTS\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"operator\":\"NOT_STARTS_WITH\",\"value\":\"wcp-cluster-user\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"DOES_NOT_CONTAIN\",\"value\":\"executequerypipeline,uploaduilogs,fetchallremoteuipluginconfig,groupbysearch,LOGOUT,UpdatePlatformDeploymentConfig,UpdateUserPreferences\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"NOT_STARTS_WITH\",\"value\":\"Get,List,Query,Search,Read,Refresh,Filter,PlatformDeploymentProgress,UpdateDeployment\"}],\"supplementalConstraints\":[],\"groupByFields\":[{\"displayName\":\"vmw_nsxt_user\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"displayNamespace\":\"Unknown\",\"numericGroupByType\":\"EACH_VALUE\",\"numericGroupByValue\":null}],\"contentPacksToIncludeFields\":[],\"extractedFields\":[{\"displayName\":\"vmw_nsxt_audit_operation_status\",\"preContext\":\"status(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_operation\",\"preContext\":\"Operation(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_user\",\"preContext\":\"UserName(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\".+?\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"myNSXModuleName\",\"preContext\":\"ModuleName=\\\"\",\"postContext\":\"\\\"\\\\, Operation\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqtlpmr2wyzkomfwwk000\",\"constraints\":null}]}",
+          "messageQuery":""
+        }, {
+          "name":"Successful Config DFW Operations by User",
+          "info":"",
+          "gridWidth":"1/2",
+          "chartType":null,
+          "chartOptions":"{\"logaxis\":false,\"legend\":true,\"stacking\":\"normal\",\"spline\":false}",
+          "widgetType":"chart",
+          "chartQuery":"{\"query\":\"\",\"startTimeMillis\":1742376759323,\"endTimeMillis\":1742380359514,\"piqlFunctionGroups\":[{\"functions\":[{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false}],\"field\":null}],\"dateFilterPreset\":\"CUSTOM\",\"shouldGroupByTime\":true,\"includeAllContentPackFields\":true,\"eventSortOrder\":\"DESC\",\"summarySortOrder\":\"DESC\",\"compareQueryOrderBy\":\"TREND\",\"compareQuerySortOrder\":\"DESC\",\"compareQueryOptions\":null,\"messageViewType\":\"EVENTS\",\"constraintToggle\":\"ALL\",\"piqlFunction\":{\"label\":\"Count\",\"value\":\"COUNT\",\"requiresField\":false,\"numericOnly\":false},\"piqlFunctionField\":null,\"fieldConstraints\":[{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"EXISTS\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"operator\":\"CONTAINS\",\"value\":\"success\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"operator\":\"EXISTS\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqtlpmr2wyzkomfwwk000\",\"operator\":\"EXISTS\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"EXISTS\"},{\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"operator\":\"CONTAINS\",\"value\":\"patchsecuritypolicyfordomain\"}],\"supplementalConstraints\":[],\"groupByFields\":[{\"displayName\":\"vmw_nsxt_user\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"displayNamespace\":\"Unknown\",\"numericGroupByType\":\"EACH_VALUE\",\"numericGroupByValue\":null}],\"contentPacksToIncludeFields\":[],\"extractedFields\":[{\"displayName\":\"vmw_nsxt_audit_operation_status\",\"preContext\":\"status(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpwc5lenf2f633qmvzgc5djn5xf643umf2hk4y0\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_operation\",\"preContext\":\"Operation(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpw64dfojqxi2lpny000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"vmw_nsxt_user\",\"preContext\":\"UserName(?::'|=\\\")\",\"postContext\":\"(?:'|\\\")\",\"regexValue\":\".+?\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw45tno5pw443yorpxk43foi000000\",\"constraints\":\"{\\\"searchTerms\\\":\\\"comp subcomp\\\"}\"},{\"displayName\":\"myNSXModuleName\",\"preContext\":\"ModuleName=\\\"\",\"postContext\":\"\\\"\\\\, Operation\",\"regexValue\":\"\\\\w+\",\"internalName\":\"ibadcoc7mnxw2ltwnv3wc4tffz2gw33qorxw43lzjzjvqtlpmr2wyzkomfwwk000\",\"constraints\":null}]}",
+          "messageQuery":""
+        } ]
+      } ],
+      "itemUuid":"e4f21a68-e725-3400-b970-1229c065b86a"
+    } ],
+    "header":""
+  } ],
+  "aliasFields":[ ],
+  "aliasRules":[ ],
+  "author":"Thomas Kopton",
+  "url":"",
+  "contentVersion":"1.0"
+}
