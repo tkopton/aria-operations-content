@@ -1,0 +1,40 @@
+{
+  "name":"myNSXExtractedFields",
+  "namespace":"com.broadcom.tkopton",
+  "contentPackId":"com.broadcom.tkopton",
+  "framework":"#9c4",
+  "version":"2.4",
+  "extractedFields":[ {
+    "displayName":"myNSXAudit",
+    "preContext":"",
+    "postContext":" comp",
+    "regexValue":"\\S+",
+    "internalName":"ibademc7mnxw2ltcojxwczddn5ws45dln5yhi33onv4u4u2yif2wi2lu",
+    "constraints":"{\"filters\":[{\"hidden\":false,\"internalName\":\"appname\",\"displayName\":\"appname\",\"operator\":\"CONTAINS\",\"value\":\"nsx\",\"fieldType\":\"STRING\",\"isExtracted\":false}]}",
+    "info":null
+  }, {
+    "displayName":"myNSXModuleName",
+    "preContext":"ModuleName=\"",
+    "postContext":"\"\\, Operation",
+    "regexValue":"\\w+",
+    "internalName":"ibademc7mnxw2ltcojxwczddn5ws45dln5yhi33onv4u4u2yjvxwi5lmmvhgc3lf",
+    "constraints":null,
+    "info":null
+  }, {
+    "displayName":"myNSXUserSourceIP",
+    "preContext":"@",
+    "postContext":"\"\\, ModuleName",
+    "regexValue":"\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
+    "internalName":"ibademc7mnxw2ltcojxwczddn5ws45dln5yhi33onv4u4u2ykvzwk4stn52xey3fjfia0000",
+    "constraints":"{\"filters\":[{\"internalName\":\"appname\",\"displayName\":\"appname\",\"operator\":\"CONTAINS\",\"value\":\"nsx\",\"fieldType\":\"STRING\",\"isExtracted\":false,\"hidden\":false}]}",
+    "info":null
+  } ],
+  "queries":[ ],
+  "alerts":[ ],
+  "dashboardSections":[ ],
+  "aliasFields":[ ],
+  "aliasRules":[ ],
+  "author":"Thomas Kopton",
+  "url":"",
+  "contentVersion":"1.0"
+}
