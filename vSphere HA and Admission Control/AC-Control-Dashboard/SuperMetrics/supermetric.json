@@ -1,0 +1,62 @@
+{
+   "5e35210a-4362-406c-b147-b77b18c27cb8": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1608115633427,
+      "name": "tkopton-AC-Desired-Value-N+1",
+      "formula": "(1/${this, metric=summary|total_number_hosts})*100",
+      "description": "",
+      "unitId": "percent",
+      "modifiedBy": "ac133867-8939-44b3-8049-49189d4dbd41"
+   },
+   "ae8626f3-f0d4-48d0-b2b3-613608070906": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1608137129170,
+      "name": "tkopton-Hosts Providing Resources",
+      "formula": "${this, metric=summary|number_running_hosts} - ${this, metric=Super Metric|sm_2474e404-e194-40cf-86b7-137cc895c16e}",
+      "description": "Hosts not in maintenance: Running - in Maintenance",
+      "unitId": "",
+      "modifiedBy": "ac133867-8939-44b3-8049-49189d4dbd41"
+   },
+   "2474e404-e194-40cf-86b7-137cc895c16e": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1608136458148,
+      "name": "tkopton-Number Hosts in Maintenance",
+      "formula": "count(${adaptertype=VMWARE, objecttype=HostSystem, metric=runtime|maintenanceState, depth=1, where = \"Runtime|MaintenanceState !equals notInMaintenance\"})",
+      "description": "",
+      "unitId": "",
+      "modifiedBy": "ac133867-8939-44b3-8049-49189d4dbd41"
+   },
+   "42f1840e-f02d-40a3-aa97-bf99b30072a1": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1608193080320,
+      "name": "tkopton-Cluster n+1 compliant",
+      "formula": "(${this, metric=configuration|dasConfig|admissionControlPolicy|cpuFailoverResourcesPercent}==${this, metric=Super Metric|sm_5e35210a-4362-406c-b147-b77b18c27cb8}?1:0)",
+      "description": "",
+      "unitId": "",
+      "modifiedBy": "ac133867-8939-44b3-8049-49189d4dbd41"
+   },
+   "e6239d20-657a-4621-8272-1c083825162a": {
+      "resourceKinds": [{
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      }],
+      "modificationTime": 1608191636611,
+      "name": "tkopton-Cluster n*2 compliant",
+      "formula": "(${this, metric=configuration|dasConfig|admissionControlPolicy|cpuFailoverResourcesPercent}==50?1:0)",
+      "description": "",
+      "unitId": "",
+      "modifiedBy": "ac133867-8939-44b3-8049-49189d4dbd41"
+   }
+}
