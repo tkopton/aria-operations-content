@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><alertContent>
+    <SymptomDefinitions>
+        <SymptomDefinition adapterKind="VMWARE" disableInBasePolicy="true" id="SymptomDefinition-c1a05025-43db-4679-987c-9258e88b925d" name="tk-com.vmware.vc.ha.VmRestartedByHAEvent" resourceKind="VirtualMachine">
+            <State severity="critical">
+                <Condition eventMsg="vSphere HA restarted virtual machine" eventSubType="14" eventType="10" operator="contains" type="msg_event"/>
+            </State>
+        </SymptomDefinition>
+    </SymptomDefinitions>
+</alertContent>
