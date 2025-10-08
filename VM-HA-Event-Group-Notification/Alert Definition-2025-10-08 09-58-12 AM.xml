@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><alertContent>
+    <AlertDefinitions>
+        <AlertDefinition adapterKind="Container" disableInBasePolicy="true" id="AlertDefinition-7a8d960e-e656-4ea5-b315-0a920054800e" name="tk-GroupAlert" resourceKind="Department" subType="19" type="15">
+            <State severity="automatic">
+                <SymptomSet aggregation="count" aggregationOperator="&gt;" applyOn="child" operator="and" ref="SymptomDefinition-c1a05025-43db-4679-987c-9258e88b925d" value="0.0"/>
+                <Impact key="health" type="badge"/>
+            </State>
+        </AlertDefinition>
+    </AlertDefinitions>
+    <SymptomDefinitions>
+        <SymptomDefinition adapterKind="VMWARE" disableInBasePolicy="true" id="SymptomDefinition-c1a05025-43db-4679-987c-9258e88b925d" name="tk-com.vmware.vc.ha.VmRestartedByHAEvent" resourceKind="VirtualMachine">
+            <State severity="critical">
+                <Condition eventMsg="vSphere HA restarted virtual machine" eventSubType="14" eventType="10" operator="contains" type="msg_event"/>
+            </State>
+        </SymptomDefinition>
+    </SymptomDefinitions>
+</alertContent>
