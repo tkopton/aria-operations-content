@@ -1,0 +1,26 @@
+{"2c86f261-a0c5-4bab-ad15-47c85ba1e962": {
+   "resourceKinds": [
+      {
+         "resourceKindKey": "HostSystem",
+         "adapterKindKey": "VMWARE"
+      },
+      {
+         "resourceKindKey": "ClusterComputeResource",
+         "adapterKindKey": "VMWARE"
+      },
+      {
+         "resourceKindKey": "VMwareAdapter Instance",
+         "adapterKindKey": "VMWARE"
+      },
+      {
+         "resourceKindKey": "Datacenter",
+         "adapterKindKey": "VMWARE"
+      }
+   ],
+   "modificationTime": 1764931151466,
+   "name": "countNSXCores",
+   "formula": "sum(${adaptertype=VMWARE, objecttype=HostSystem, attribute=hardware|cpuInfo|numCpuCores, depth=4, where=(${metric=CustomProperty|tk-isNSXenabled} == 1 )})",
+   "description": "Sum of cores on NSX enabled ESX hosts",
+   "unitId": "",
+   "modifiedBy": "3eb23b1b-beca-4132-ac55-accb3261fd5c"
+}}
