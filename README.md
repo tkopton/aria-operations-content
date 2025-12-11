@@ -10,4 +10,5 @@ Content mentioned in my blog posts, including:
 ---
 
 ## Super Metrics
-*(not necessarily related to my blog posts and located in a separate folder)*
+*Not necessarily related to my blog posts and located in a separate folder*
+*A README.md is (or will be soon) available in this folder describiung the Super Metrics*
