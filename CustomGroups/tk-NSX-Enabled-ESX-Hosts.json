@@ -1,0 +1,48 @@
+{
+   "customGroups": [{
+      "resourceKind": "Function",
+      "membershipDefinition": {"ruleGroups": [{
+         "resourceKind": "HostSystem",
+         "adapterKind": "VMWARE",
+         "rules": [{
+            "ruleRelationshipType": "DESCENDANT",
+            "ruleType": "RelationshipRule",
+            "ruleStringOperator": "CONTAINS",
+            "ruleStringValue": "transport"
+         }]
+      }]},
+      "adapterKind": "Container",
+      "autoResolveMembership": true,
+      "name": "tk-NSX-Enabled-ESX-Hosts",
+      "description": "Contains ESX Hosts which belongs to at least one Transport Zone.",
+      "started": true,
+      "membershipChangeActionInfo": [{
+         "metricPropertyActionDataMetricKey": "CustomProperty|tk-isNSXenabled",
+         "leaveNumericValue": -1,
+         "membershipChangeActionType": "MetricPropertyData",
+         "isProperty": true,
+         "enterNumericValue": 1
+      }]
+   }],
+   "customGroupTypes": [{
+      "resourceKind": "Function",
+      "localization": [
+         {
+            "resourceKindName": "機能",
+            "locale": "ja"
+         },
+         {
+            "resourceKindName": "Function",
+            "locale": "en"
+         },
+         {
+            "resourceKindName": "Fonction",
+            "locale": "fr"
+         },
+         {
+            "resourceKindName": "Función",
+            "locale": "es"
+         }
+      ]
+   }]
+}
