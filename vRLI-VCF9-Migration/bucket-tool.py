@@ -49,15 +49,20 @@ def get_bucket_output():
         print(e.stderr)
         sys.exit(1)
 
+def check_positive_days(value):
+    """Validates that the days argument is a positive integer."""
+    ivalue = int(value)
+    if ivalue < 0:
+        raise argparse.ArgumentTypeError(f"'{value}' is invalid. Please provide a positive number of days.")
+    return ivalue
+
 # --- Subcommand Handlers ---
 
 def handle_archived_size(args):
-    """Calculates the sum of sizes for archived buckets in a date range."""
     user_start_ms = parse_date_to_ms(args.start_date)
     user_end_ms = parse_date_to_ms(args.end_date)
     
     output = get_bucket_output()
-    
     total_size_bytes = 0
     matched_ids = []
 
@@ -74,24 +79,21 @@ def handle_archived_size(args):
                 start_time = int(start_match.group(1))
                 end_time = int(end_match.group(1))
 
-                # Overlap logic: bucket starts before user's end time AND ends after user's start time
+                # Overlap logic
                 if start_time <= user_end_ms and end_time >= user_start_ms:
                     total_size_bytes += size
                     matched_ids.append(bucket_id)
 
     print(f"\n--- Archived Buckets Summary (Date Range) ---")
     print(f"Found {len(matched_ids)} archived bucket(s) overlapping the timeframe.\n")
-    
     if matched_ids:
         print("Matched Bucket IDs:")
         for b_id in matched_ids:
             print(f" - {b_id}")
         print()
-
     print(f"Total size: {total_size_bytes} bytes ({format_size(total_size_bytes)})\n")
 
 def handle_list_active(args):
-    """Lists all active buckets with their start times and sizes."""
     output = get_bucket_output()
     active_buckets = []
 
@@ -103,18 +105,15 @@ def handle_list_active(args):
 
             if id_match:
                 bucket_id = id_match.group(1)
-                
                 if start_match:
                     start_time_str = format_ms_to_date(int(start_match.group(1)))
                 else:
                     start_time_str = "N/A (cmd=[NULL])"
-                
                 size_bytes = int(size_match.group(1)) if size_match else 0
                 active_buckets.append((bucket_id, start_time_str, size_bytes))
 
     print(f"\n--- Active Buckets ---")
     print(f"Found {len(active_buckets)} active bucket(s).\n")
-    
     if active_buckets:
         print(f"{'BUCKET ID'.ljust(40)} | {'START TIME'.ljust(19)} | SIZE")
         print("-" * 85)
@@ -124,11 +123,9 @@ def handle_list_active(args):
         print()
 
 def handle_list_archived(args):
-    """Lists archived buckets, optionally filtered by the last N days from the newest bucket."""
     output = get_bucket_output()
     parsed_buckets = []
 
-    # 1. Parse all archived buckets
     for line in output.splitlines():
         if "status=archived" in line:
             id_match = re.search(r'id=([a-f0-9\-]+)', line)
@@ -148,54 +145,64 @@ def handle_list_archived(args):
         print("No archived buckets found.")
         return
 
-    # 2. Apply the '-days' filter if the user provided it
+    # Apply the '-days' filter if the user provided it
     if args.days is not None:
-        # Find the absolute newest end time across all archived buckets
         newest_end_ms = max(b['end_ms'] for b in parsed_buckets)
-        
-        # Calculate cutoff time (days * 24h * 60m * 60s * 1000ms)
         cutoff_ms = newest_end_ms - (args.days * 24 * 60 * 60 * 1000)
-        
-        # Keep buckets that end on or after the cutoff time
         parsed_buckets = [b for b in parsed_buckets if b['end_ms'] >= cutoff_ms]
         print(f"\n--- Archived Buckets (Last {args.days} Days from Newest Bucket) ---")
     else:
         print(f"\n--- All Archived Buckets ---")
 
-    # 3. Sort chronologically by start time and output
+    # Sort chronologically by start time
     parsed_buckets.sort(key=lambda x: x['start_ms'])
-    
     total_size_bytes = 0
     print(f"Found {len(parsed_buckets)} matching archived bucket(s).\n")
     
     if parsed_buckets:
         print(f"{'BUCKET ID'.ljust(40)} | {'START TIME'.ljust(19)} | {'END TIME'.ljust(19)} | SIZE")
         print("-" * 110)
-        
         for b in parsed_buckets:
             b_start_str = format_ms_to_date(b['start_ms'])
             b_end_str = format_ms_to_date(b['end_ms'])
             human_size = format_size(b['size'])
-            
             print(f"{b['id'].ljust(40)} | {b_start_str.ljust(19)} | {b_end_str.ljust(19)} | {b['size']} bytes ({human_size})")
             total_size_bytes += b['size']
-        
         print("-" * 110)
         
     print(f"\nGrand Total Size: {total_size_bytes} bytes ({format_size(total_size_bytes)})\n")
 
-
 # --- Main Entry Point ---
 
 def main():
+    description_text = (
+        "VMware Aria Operations for Logs / vRealize Log Insight Bucket Tool\n\n"
+        "This script queries the local bucket-index and calculates sizes\n"
+        "for both active and archived data buckets."
+    )
+
+    epilog_text = (
+        "EXAMPLE USAGE:\n"
+        "-------------------\n"
+        "1. Calculate archived buckets within a specific date range:\n"
+        "   ./bucket_tool.py archived-size 11.02.2026-00:00:00 16.02.2026-23:59:59\n\n"
+        "2. List all currently active buckets and their sizes:\n"
+        "   ./bucket_tool.py list-active\n\n"
+        "3. List all archived buckets chronologically and calculate grand total:\n"
+        "   ./bucket_tool.py list-archived\n\n"
+        "4. List archived buckets from the last N days (calculated from newest bucket):\n"
+        "   ./bucket_tool.py list-archived -days 7\n"
+    )
+
     parser = argparse.ArgumentParser(
-        description="VMware Aria Operations for Logs / vRealize Log Insight Bucket Tool",
+        description=description_text,
+        epilog=epilog_text,
         formatter_class=argparse.RawTextHelpFormatter
     )
     
     subparsers = parser.add_subparsers(title="Commands", dest="command", required=True)
 
-    # Subparser for 'archived-size' (Date range specific)
+    # Subparser for 'archived-size'
     parser_archived = subparsers.add_parser(
         "archived-size", 
         help="Calculate the total size of archived buckets within a specific date range."
@@ -211,22 +218,24 @@ def main():
     )
     parser_active.set_defaults(func=handle_list_active)
 
-    # Subparser for 'list-archived' (All archived buckets OR last N days)
+    # Subparser for 'list-archived'
     parser_list_archived = subparsers.add_parser(
         "list-archived", 
-        help="List archived buckets with start/end times and calculate grand total size."
+        help="List archived buckets chronologically and calculate total size."
     )
-    # The "-days" flag allows flexibility in how you specify the number of days
     parser_list_archived.add_argument(
         "-days", "--days", 
-        type=int, 
+        type=check_positive_days, 
         help="Filter to show only buckets within N days of the newest archived bucket."
     )
     parser_list_archived.set_defaults(func=handle_list_archived)
 
+    # If no arguments are provided, print help instead of throwing a short error
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+
     args = parser.parse_args()
-    
-    # Execute the appropriate function based on the subcommand
     args.func(args)
 
 if __name__ == "__main__":
