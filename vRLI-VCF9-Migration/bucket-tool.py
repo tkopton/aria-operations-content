@@ -124,11 +124,11 @@ def handle_list_active(args):
         print()
 
 def handle_list_archived(args):
-    """Lists all archived buckets with start/end times and calculates total size."""
+    """Lists archived buckets, optionally filtered by the last N days from the newest bucket."""
     output = get_bucket_output()
-    archived_buckets = []
-    total_size_bytes = 0
+    parsed_buckets = []
 
+    # 1. Parse all archived buckets
     for line in output.splitlines():
         if "status=archived" in line:
             id_match = re.search(r'id=([a-f0-9\-]+)', line)
@@ -137,30 +137,53 @@ def handle_list_archived(args):
             end_match = re.search(r'endTime=(\d+)', line)
 
             if id_match and size_match and start_match and end_match:
-                bucket_id = id_match.group(1)
-                size = int(size_match.group(1))
-                start_time_str = format_ms_to_date(int(start_match.group(1)))
-                end_time_str = format_ms_to_date(int(end_match.group(1)))
-                
-                archived_buckets.append((bucket_id, start_time_str, end_time_str, size))
-                total_size_bytes += size
+                parsed_buckets.append({
+                    'id': id_match.group(1),
+                    'size': int(size_match.group(1)),
+                    'start_ms': int(start_match.group(1)),
+                    'end_ms': int(end_match.group(1))
+                })
 
-    print(f"\n--- All Archived Buckets ---")
-    print(f"Found {len(archived_buckets)} archived bucket(s).\n")
+    if not parsed_buckets:
+        print("No archived buckets found.")
+        return
+
+    # 2. Apply the '-days' filter if the user provided it
+    if args.days is not None:
+        # Find the absolute newest end time across all archived buckets
+        newest_end_ms = max(b['end_ms'] for b in parsed_buckets)
+        
+        # Calculate cutoff time (days * 24h * 60m * 60s * 1000ms)
+        cutoff_ms = newest_end_ms - (args.days * 24 * 60 * 60 * 1000)
+        
+        # Keep buckets that end on or after the cutoff time
+        parsed_buckets = [b for b in parsed_buckets if b['end_ms'] >= cutoff_ms]
+        print(f"\n--- Archived Buckets (Last {args.days} Days from Newest Bucket) ---")
+    else:
+        print(f"\n--- All Archived Buckets ---")
+
+    # 3. Sort chronologically by start time and output
+    parsed_buckets.sort(key=lambda x: x['start_ms'])
     
-    if archived_buckets:
-        # Table Header
+    total_size_bytes = 0
+    print(f"Found {len(parsed_buckets)} matching archived bucket(s).\n")
+    
+    if parsed_buckets:
         print(f"{'BUCKET ID'.ljust(40)} | {'START TIME'.ljust(19)} | {'END TIME'.ljust(19)} | SIZE")
         print("-" * 110)
         
-        # Table Rows
-        for b_id, b_start, b_end, b_size in archived_buckets:
-            human_size = format_size(b_size)
-            print(f"{b_id.ljust(40)} | {b_start.ljust(19)} | {b_end.ljust(19)} | {b_size} bytes ({human_size})")
+        for b in parsed_buckets:
+            b_start_str = format_ms_to_date(b['start_ms'])
+            b_end_str = format_ms_to_date(b['end_ms'])
+            human_size = format_size(b['size'])
+            
+            print(f"{b['id'].ljust(40)} | {b_start_str.ljust(19)} | {b_end_str.ljust(19)} | {b['size']} bytes ({human_size})")
+            total_size_bytes += b['size']
         
         print("-" * 110)
         
     print(f"\nGrand Total Size: {total_size_bytes} bytes ({format_size(total_size_bytes)})\n")
+
 
 # --- Main Entry Point ---
 
@@ -188,10 +211,16 @@ def main():
     )
     parser_active.set_defaults(func=handle_list_active)
 
-    # Subparser for 'list-archived' (All archived buckets)
+    # Subparser for 'list-archived' (All archived buckets OR last N days)
     parser_list_archived = subparsers.add_parser(
         "list-archived", 
-        help="List all archived buckets with start/end times and calculate grand total size."
+        help="List archived buckets with start/end times and calculate grand total size."
+    )
+    # The "-days" flag allows flexibility in how you specify the number of days
+    parser_list_archived.add_argument(
+        "-days", "--days", 
+        type=int, 
+        help="Filter to show only buckets within N days of the newest archived bucket."
     )
     parser_list_archived.set_defaults(func=handle_list_archived)
 
