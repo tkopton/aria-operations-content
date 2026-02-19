@@ -185,13 +185,13 @@ def main():
         "EXAMPLE USAGE:\n"
         "-------------------\n"
         "1. Calculate archived buckets within a specific date range:\n"
-        "   ./bucket_tool.py archived-size 11.02.2026-00:00:00 16.02.2026-23:59:59\n\n"
+        "   ./bucket-tool.py archived-size 11.02.2026-00:00:00 16.02.2026-23:59:59\n\n"
         "2. List all currently active buckets and their sizes:\n"
-        "   ./bucket_tool.py list-active\n\n"
+        "   ./bucket-tool.py list-active\n\n"
         "3. List all archived buckets chronologically and calculate grand total:\n"
-        "   ./bucket_tool.py list-archived\n\n"
+        "   ./bucket-tool.py list-archived\n\n"
         "4. List archived buckets from the last N days (calculated from newest bucket):\n"
-        "   ./bucket_tool.py list-archived -days 7\n"
+        "   ./bucket-tool.py list-archived -days 7\n"
     )
 
     parser = argparse.ArgumentParser(
