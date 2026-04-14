@@ -20,8 +20,17 @@ def parse_date_to_ms(date_str):
 
 def format_ms_to_date(ms_timestamp):
     """Converts UNIX epoch in milliseconds to a formatted date string."""
-    dt = datetime.fromtimestamp(ms_timestamp / 1000.0)
-    return dt.strftime("%d.%m.%Y-%H:%M:%S")
+    # Java Long.MAX_VALUE is 9223372036854775807. 
+    # VCF Operations Logs uses this for uninitialized/future timestamps.
+    if ms_timestamp >= 9223372036854775807:
+        return "N/A (Uninitialized)"
+    
+    try:
+        dt = datetime.fromtimestamp(ms_timestamp / 1000.0)
+        return dt.strftime("%d.%m.%Y-%H:%M:%S")
+    except (ValueError, OverflowError):
+        # Catch any other impossibly large dates
+        return "N/A (Out of bounds)"
 
 def format_size(size_bytes):
     """Converts raw bytes to a human-readable string (KB, MB, GB, etc.)."""
@@ -36,13 +45,13 @@ def format_size(size_bytes):
     return f"{p:.2f} {size_name[i]}"
 
 def get_bucket_output():
-    """Executes the Log Insight bucket-index command and returns the output."""
+    """Executes the VCF Operations Logs bucket-index command and returns the output."""
     cmd = ["/usr/lib/loginsight/application/sbin/bucket-index", "show"]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         return result.stdout
     except FileNotFoundError:
-        print("Error: The bucket-index command was not found. Are you running this on the Log Insight node?")
+        print("Error: The bucket-index command was not found. Are you running this on the VCF Operations Logs node?")
         sys.exit(1)
     except subprocess.CalledProcessError as e:
         print(f"Command execution failed with return code {e.returncode}")
@@ -79,7 +88,6 @@ def handle_archived_size(args):
                 start_time = int(start_match.group(1))
                 end_time = int(end_match.group(1))
 
-                # Overlap logic
                 if start_time <= user_end_ms and end_time >= user_start_ms:
                     total_size_bytes += size
                     matched_ids.append(bucket_id)
@@ -134,27 +142,30 @@ def handle_list_archived(args):
             end_match = re.search(r'endTime=(\d+)', line)
 
             if id_match and size_match and start_match and end_match:
+                # Ensure we skip buckets that somehow have uninitialized end times in archived status
+                end_ms = int(end_match.group(1))
+                if end_ms >= 9223372036854775807:
+                    continue 
+
                 parsed_buckets.append({
                     'id': id_match.group(1),
                     'size': int(size_match.group(1)),
                     'start_ms': int(start_match.group(1)),
-                    'end_ms': int(end_match.group(1))
+                    'end_ms': end_ms
                 })
 
     if not parsed_buckets:
         print("No archived buckets found.")
         return
 
-    # Apply the '-days' filter if the user provided it
     if args.days is not None:
         newest_end_ms = max(b['end_ms'] for b in parsed_buckets)
         cutoff_ms = newest_end_ms - (args.days * 24 * 60 * 60 * 1000)
         parsed_buckets = [b for b in parsed_buckets if b['end_ms'] >= cutoff_ms]
-        print(f"\n--- Archived Buckets (Last {args.days} Days from Newest Bucket) ---")
+        print(f"\n--- Archived Buckets Overview (Last {args.days} Days from Newest Bucket) ---")
     else:
-        print(f"\n--- All Archived Buckets ---")
+        print(f"\n--- All Archived Buckets Overview ---")
 
-    # Sort chronologically by start time
     parsed_buckets.sort(key=lambda x: x['start_ms'])
     total_size_bytes = 0
     print(f"Found {len(parsed_buckets)} matching archived bucket(s).\n")
@@ -176,7 +187,7 @@ def handle_list_archived(args):
 
 def main():
     description_text = (
-        "VMware Aria Operations for Logs / vRealize Log Insight Bucket Tool\n\n"
+        "VMware Aria Operations for Logs / vRealize VCF Operations Logs Bucket Tool\n\n"
         "This script queries the local bucket-index and calculates sizes\n"
         "for both active and archived data buckets."
     )
@@ -184,14 +195,14 @@ def main():
     epilog_text = (
         "EXAMPLE USAGE:\n"
         "-------------------\n"
-        "1. Calculate archived buckets within a specific date range:\n"
+        "1. Calculate total size of archived buckets using a START and END DATE:\n"
         "   ./bucket-tool.py archived-size 11.02.2026-00:00:00 16.02.2026-23:59:59\n\n"
-        "2. List all currently active buckets and their sizes:\n"
-        "   ./bucket-tool.py list-active\n\n"
-        "3. List all archived buckets chronologically and calculate grand total:\n"
+        "2. Show an OVERVIEW of ALL archived buckets (chronological list with grand total):\n"
         "   ./bucket-tool.py list-archived\n\n"
-        "4. List archived buckets from the last N days (calculated from newest bucket):\n"
-        "   ./bucket-tool.py list-archived -days 7\n"
+        "3. Show an OVERVIEW of archived buckets from the last 7 days only:\n"
+        "   ./bucket-tool.py list-archived -days 7\n\n"
+        "4. List all currently ACTIVE buckets and their sizes:\n"
+        "   ./bucket-tool.py list-active\n"
     )
 
     parser = argparse.ArgumentParser(
@@ -202,35 +213,31 @@ def main():
     
     subparsers = parser.add_subparsers(title="Commands", dest="command", required=True)
 
-    # Subparser for 'archived-size'
     parser_archived = subparsers.add_parser(
         "archived-size", 
-        help="Calculate the total size of archived buckets within a specific date range."
+        help="Calculate the total size of archived buckets within a specific start and end date."
     )
     parser_archived.add_argument("start_date", help="Start date (dd.mm.yyyy-hh:mm:ss)")
     parser_archived.add_argument("end_date", help="End date (dd.mm.yyyy-hh:mm:ss)")
     parser_archived.set_defaults(func=handle_archived_size)
 
-    # Subparser for 'list-active'
     parser_active = subparsers.add_parser(
         "list-active", 
         help="List all currently active buckets along with start times and sizes."
     )
     parser_active.set_defaults(func=handle_list_active)
 
-    # Subparser for 'list-archived'
     parser_list_archived = subparsers.add_parser(
         "list-archived", 
-        help="List archived buckets chronologically and calculate total size."
+        help="Show an overview of archived buckets chronologically and calculate total size."
     )
     parser_list_archived.add_argument(
         "-days", "--days", 
         type=check_positive_days, 
-        help="Filter to show only buckets within N days of the newest archived bucket."
+        help="Filter the overview to show only buckets within N days of the newest archived bucket."
     )
     parser_list_archived.set_defaults(func=handle_list_archived)
 
-    # If no arguments are provided, print help instead of throwing a short error
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
