@@ -1,0 +1,16 @@
+{
+   "1957e6d4-259b-4158-8308-f6c9a07e8d90": {
+      "resourceKinds": [
+         {
+            "resourceKindKey": "mpb_vcf_value_realization_world",
+            "adapterKindKey": "mpb_vcf_value_realization"
+         }
+      ],
+      "modificationTime": 1792650893058,
+      "name": "tk-ValueRealization-BestPracticeFindings-Hits",
+      "formula": "sum(${adaptertype=mpb_vcf_value_realization, objecttype=mpb_vcf_value_realization_vcffinding, metric=findingaffectedobjectscount, depth=2, where=\"findingtype equals Best Practice\"})",
+      "description": "Sum of affected objects across all findings in the category. One object hit by several findings is counted several times.",
+      "unitId": "",
+      "modifiedBy": "e96c03f1-fd48-424b-a3ef-8751353edb24"
+   }
+}

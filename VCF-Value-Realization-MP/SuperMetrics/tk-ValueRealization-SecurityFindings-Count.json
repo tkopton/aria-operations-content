@@ -1,0 +1,16 @@
+{
+   "9ba4caa0-7808-43b4-9c8d-10d31eccd42f": {
+      "resourceKinds": [
+         {
+            "resourceKindKey": "mpb_vcf_value_realization_world",
+            "adapterKindKey": "mpb_vcf_value_realization"
+         }
+      ],
+      "modificationTime": 1792597093465,
+      "name": "tk-ValueRealization-SecurityFindings-Count",
+      "formula": "count(${adaptertype=mpb_vcf_value_realization, objecttype=mpb_vcf_value_realization_vcffinding, metric=findingtype, depth=2, where=\"findingtype equals Security Advisor\"})",
+      "description": "",
+      "unitId": "",
+      "modifiedBy": "e96c03f1-fd48-424b-a3ef-8751353edb24"
+   }
+}

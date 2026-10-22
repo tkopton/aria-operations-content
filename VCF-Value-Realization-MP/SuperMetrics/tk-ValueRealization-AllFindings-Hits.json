@@ -1,0 +1,16 @@
+{
+   "37820475-f7ab-4363-8234-baead1c83ff3": {
+      "resourceKinds": [
+         {
+            "resourceKindKey": "mpb_vcf_value_realization_world",
+            "adapterKindKey": "mpb_vcf_value_realization"
+         }
+      ],
+      "modificationTime": 1792651069511,
+      "name": "tk-ValueRealization-AllFindings-Hits",
+      "formula": "sum(${adaptertype=mpb_vcf_value_realization, objecttype=mpb_vcf_value_realization_vcffinding, metric=findingaffectedobjectscount, depth=2})",
+      "description": "Sum of affected objects across all findings in all categories. One object hit by several findings is counted several times.",
+      "unitId": "",
+      "modifiedBy": "e96c03f1-fd48-424b-a3ef-8751353edb24"
+   }
+}

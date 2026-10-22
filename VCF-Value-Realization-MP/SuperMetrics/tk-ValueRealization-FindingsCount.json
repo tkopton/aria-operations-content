@@ -1,0 +1,16 @@
+{
+   "21842d0c-d52d-412f-8fd9-b587c39364af": {
+      "resourceKinds": [
+         {
+            "resourceKindKey": "mpb_vcf_value_realization_world",
+            "adapterKindKey": "mpb_vcf_value_realization"
+         }
+      ],
+      "modificationTime": 1792596027096,
+      "name": "tk-ValueRealization-FindingsCount",
+      "formula": "count(${adaptertype=mpb_vcf_value_realization, objecttype=mpb_vcf_value_realization_vcffinding, metric=findingrefreshmode, depth=2})",
+      "description": "",
+      "unitId": "",
+      "modifiedBy": "e96c03f1-fd48-424b-a3ef-8751353edb24"
+   }
+}

@@ -1,0 +1,16 @@
+{
+   "23ca1066-b767-47ed-abfb-6075d64d288d": {
+      "resourceKinds": [
+         {
+            "resourceKindKey": "mpb_vcf_value_realization_world",
+            "adapterKindKey": "mpb_vcf_value_realization"
+         }
+      ],
+      "modificationTime": 1792597012249,
+      "name": "tk-ValueRealization-BestPracticeFindings-Count",
+      "formula": "count(${adaptertype=mpb_vcf_value_realization, objecttype=mpb_vcf_value_realization_vcffinding, metric=findingtype, depth=2, where=\"findingtype equals Best Practice\"})",
+      "description": "",
+      "unitId": "",
+      "modifiedBy": "e96c03f1-fd48-424b-a3ef-8751353edb24"
+   }
+}

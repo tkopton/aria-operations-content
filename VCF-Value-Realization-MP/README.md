@@ -55,6 +55,25 @@ The collection user needs the `vcf_diagnostics.view` and `environment.vcfhealth.
 
 > **Note:** the benchmarks endpoint is an **internal, unsupported** API. It requires the `X-vRealizeOps-API-use-unsupported: true` header, which the design sets. It may change between VCF Operations releases without notice.
 
+## Super Metrics
+
+The `SuperMetrics/` folder holds one export file per super metric. You can import each file on its own under **Build > Super Metrics**. All of them are assigned to the MP's world object (`mpb_vcf_value_realization_world`) and aggregate the `vcfFinding` objects below it (`depth=2`). They group findings by **finding type** (`findingType`).
+
+| Super Metric | Function | Scope |
+|---|---|---|
+| `tk-ValueRealization-FindingsCount` | count | all findings |
+| `tk-ValueRealization-DiagnosticsFindings-Count` | count | `findingType` = Diagnostic |
+| `tk-ValueRealization-SecurityFindings-Count` | count | `findingType` = Security Advisor(y) |
+| `tk-ValueRealization-BestPracticeFindings-Count` | count | `findingType` = Best Practice |
+| `tk-ValueRealization-AllFindings-Hits` | sum of affected objects | all findings |
+| `tk-ValueRealization-DiagnosticsFindings-Hits` | sum of affected objects | `findingType` = Diagnostic |
+| `tk-ValueRealization-SecurityFindings-Hits` | sum of affected objects | `findingType` = Security Advisor(y) |
+| `tk-ValueRealization-BestPracticeFindings-Hits` | sum of affected objects | `findingType` = Best Practice |
+
+**Count** is the number of findings. **Hits** is the sum of `findingAffectedObjectsCount`. Hits are *not* unique objects: an object affected by several findings is counted once per finding.
+
+After importing, enable the super metrics in the policy that applies to the `mpb_vcf_value_realization_world` object.
+
 ## How to use
 
 1. In VCF Operations, open **Build > Developer Center > Management Pack Builder**.
