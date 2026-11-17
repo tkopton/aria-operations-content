@@ -1,0 +1,19 @@
+name: vSphere Tags MP tests
+on:
+  push:
+    paths: ["vSphere-Tags-MP/**", ".github/workflows/vsphere-tags-mp-tests.yml"]
+  pull_request:
+    paths: ["vSphere-Tags-MP/**", ".github/workflows/vsphere-tags-mp-tests.yml"]
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vSphere-Tags-MP
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r adapter_requirements.txt pytest
+      - run: python -m pytest -q tests
