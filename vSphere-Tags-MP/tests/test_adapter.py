@@ -142,3 +142,15 @@ def test_known_categories():
         "summary|tag|Backup-Policy": "n/a",
         "summary|tag|Owner": "n/a",
     }
+
+
+def test_test_passes_without_suite_api_client():
+    instance = FakeAdapterInstance()
+    instance.suite_api_client = None
+    assert adapter.test(instance).get_json() == {}
+
+
+def test_collect_errors_without_suite_api_client():
+    instance = FakeAdapterInstance()
+    instance.suite_api_client = None
+    assert "Suite API" in adapter.collect(instance).get_json()["errorMessage"]

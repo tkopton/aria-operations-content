@@ -2,7 +2,7 @@
     "display_name": "DISPLAY_NAME",
     "name": "iSDK_vSphereTagsMP",
     "description": "DESCRIPTION",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "vcops_minimum_version": "8.10.0",
     "disk_space_required": 500,
     "run_scripts_on_all_nodes": "true",
