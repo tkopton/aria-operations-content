@@ -48,6 +48,13 @@ class FakeResponse:
         return False
 
 
+class FakeXmlResponse(FakeResponse):
+    def __init__(self, text):
+        self.text = text
+        self.status_code = 200
+        self.ok = True
+
+
 class FakeClient:
     """Mimics the Suite API. ``bulk_ok=False`` makes the bulk endpoint fail."""
 
@@ -56,6 +63,7 @@ class FakeClient:
         self.tags = tags
         self.bulk_ok = bulk_ok
         self.calls = []
+        self.xml_tags = {}
 
     def paged_post(self, url, key, **kwargs):
         return {"resourceList": self.resources}
@@ -68,6 +76,18 @@ class FakeClient:
 
     def get(self, url, **kwargs):
         self.calls.append(url)
+        if kwargs.get("headers", {}).get("Accept") == "application/xml":
+            rid = url.split("/")[3]
+            value = self.xml_tags.get(rid, "")
+            return FakeXmlResponse(
+                '<?xml version="1.0" encoding="UTF-8"?>'
+                '<ops:resource-property '
+                'xmlns:ops="http://webservice.vmware.com/vRealizeOpsMgr/1.0/" '
+                f'ops:resourceId="{rid}">'
+                '<ops:property name="summary|runtime|powerState">On</ops:property>'
+                f'<ops:property name="summary|tag">{value}</ops:property>'
+                "</ops:resource-property>"
+            )
         if url == "/api/resources/properties":
             if not self.bulk_ok:
                 return FakeResponse({}, status=404)
@@ -170,3 +190,15 @@ def test_stripped_values_are_skipped():
     out = run({"1": "[, ]", "2": "[<owner-cferber>]"})
     assert "vm1" not in out
     assert out["vm2"] == {"summary|tag|owner": "cferber"}
+
+
+def test_stripped_json_values_are_reread_as_xml():
+    resources = [resource(rid, f"vm{rid}") for rid in ["1", "2", "3"]]
+    client = FakeClient(resources, {"1": "[, ]", "2": "[<Env-Dev>]"})
+    client.xml_tags = {"1": "[&lt;owner-cferber&gt;, &lt;supporttier-gold&gt;]"}
+    raw = adapter.get_property_values(client, ["1", "2", "3"], "summary|tag")
+    assert raw == {
+        "1": "[<owner-cferber>, <supporttier-gold>]",
+        "2": "[<Env-Dev>]",
+    }
+    assert [c for c in client.calls if c == "/api/resources/1/properties"]

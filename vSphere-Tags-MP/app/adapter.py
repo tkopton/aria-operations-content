@@ -17,6 +17,7 @@ Operations Suite API, which the collector provides to the adapter automatically.
 import html
 import json
 import sys
+from xml.etree import ElementTree
 from typing import Any
 from typing import Dict
 from typing import Iterable
@@ -346,7 +347,47 @@ def get_property_values(
             for _, name, value in iter_resource_properties(body, resource_id):
                 if name == property_key and value is not None:
                     values[resource_id] = value
-    return {rid: html.unescape(v) for rid, v in values.items()}
+    values = {rid: html.unescape(v) for rid, v in values.items()}
+
+    # The JSON output of the Suite API strips "<...>" from property values, which
+    # leaves e.g. "[, ]" for summary|tag. The XML output keeps them (escaped), so
+    # re-read stripped values as XML.
+    stripped = [rid for rid, v in values.items() if is_unparseable(v)]
+    for index, resource_id in enumerate(stripped):
+        xml_value = get_property_value_xml(client, resource_id, property_key)
+        if index == 0:
+            logger.info(
+                f"{resource_id}: JSON value {values[resource_id]!r}, "
+                f"XML value {xml_value!r}"
+            )
+        if xml_value is not None and "<" in xml_value:
+            values[resource_id] = xml_value
+    return values
+
+
+def get_property_value_xml(
+    client: SuiteApiClient, resource_id: str, property_key: str
+) -> Optional[str]:
+    """Read one property of one resource from the XML output of the Suite API."""
+    with client.get(
+        f"/api/resources/{resource_id}/properties",
+        headers={"Accept": "application/xml"},
+    ) as response:
+        if not response.ok:
+            logger.warning(
+                f"XML property request for {resource_id} failed ({response.status_code})"
+            )
+            return None
+        text = response.text
+    try:
+        root = ElementTree.fromstring(text)
+    except ElementTree.ParseError as e:
+        logger.warning(f"Cannot parse XML properties of {resource_id}: {e}")
+        return None
+    for element in root.iter():
+        if element.tag.endswith("property") and element.get("name") == property_key:
+            return element.text or ""
+    return None
 
 
 def iter_resource_properties(
