@@ -27,7 +27,10 @@ Built with the [VCF Operations Integration SDK](https://github.com/vmware/vmware
   which the collector gives to every SDK adapter automatically.
 * Each collection cycle it:
   1. queries all objects of the configured types from the vCenter adapter (`VMWARE`),
-  2. reads the latest `summary|tag` value of those objects in batches,
+  2. reads the current `summary|tag` value of those objects in batches with
+     `GET /api/resources/properties` (falling back to `GET /api/resources/{id}/properties`).
+     `POST /api/resources/properties/latest/query` is not used because it strips the
+     `<...>` parts from the value, which removes the tag names,
   3. parses the string and returns `<prefix>|<Category>` properties for the existing
      objects (it extends the vCenter adapter objects, it does not create new ones).
 * Several tags from the same category (multi-cardinality categories) are joined, sorted,

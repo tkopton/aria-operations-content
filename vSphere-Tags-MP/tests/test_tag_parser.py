@@ -3,6 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "app"))
 
+from tag_parser import is_unparseable  # noqa: E402
 from tag_parser import parse_list_parameter  # noqa: E402
 from tag_parser import parse_tags  # noqa: E402
 from tag_parser import sanitize_key_segment  # noqa: E402
@@ -66,3 +67,22 @@ def test_sanitize_key_segment():
 def test_parse_list_parameter():
     assert parse_list_parameter(" a, b ,,c ") == ["a", "b", "c"]
     assert parse_list_parameter(None) == []
+
+
+def test_real_value_from_vcf_operations():
+    assert parse_tags("[<owner-cferber>, <supporttier-gold>]") == {
+        "owner": ["cferber"],
+        "supporttier": ["gold"],
+    }
+
+
+def test_stripped_value_is_unparseable():
+    for raw in ["[, ]", ",", "[,]"]:
+        assert is_unparseable(raw)
+        assert parse_tags(raw) == {}
+    for raw in [None, "", "[]", "none", "[<a-b>]"]:
+        assert not is_unparseable(raw)
+
+
+def test_items_without_category_are_dropped():
+    assert parse_tags("[<Orphan>, <Env-Dev>]") == {"Env": ["Dev"]}

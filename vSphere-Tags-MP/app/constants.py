@@ -25,5 +25,5 @@ DEFAULT_SPLIT_MODE = "first"
 DEFAULT_MULTI_VALUE_SEPARATOR = ", "
 DEFAULT_UNSET_VALUE = "none"
 
-# Number of resource IDs sent per Suite API "latest properties" query
-PROPERTY_QUERY_BATCH_SIZE = 500
+# Number of resource IDs per Suite API properties request (kept small: IDs go in the URL)
+PROPERTY_QUERY_BATCH_SIZE = 50
