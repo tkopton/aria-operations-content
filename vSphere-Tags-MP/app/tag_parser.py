@@ -24,9 +24,21 @@ _EMPTY_VALUES = {"", "[]", "none", "[none]", "null"}
 _ITEM_SEPARATOR = re.compile(r">\s*,\s*<")
 
 
+def is_unparseable(raw: Optional[str]) -> bool:
+    """True for a non-empty value without any ``<``, e.g. ``[, ]``.
+
+    That is what is left when something stripped the ``<Category-Tag>`` parts out of
+    the value, so there is nothing to parse.
+    """
+    if raw is None:
+        return False
+    value = raw.strip()
+    return value.lower() not in _EMPTY_VALUES and "<" not in value
+
+
 def split_items(raw: Optional[str]) -> List[str]:
     """Split the raw tag string into ``Category-Tag`` items."""
-    if raw is None:
+    if raw is None or is_unparseable(raw):
         return []
     value = raw.strip()
     if value.lower() in _EMPTY_VALUES:
@@ -80,6 +92,8 @@ def parse_tags(
     result: Dict[str, List[str]] = {}
     for item in split_items(raw):
         category, tag = split_item(item, known, split_mode)
+        if not category:
+            continue
         tags = result.setdefault(category, [])
         if tag not in tags:
             tags.append(tag)

@@ -49,35 +49,34 @@ class FakeResponse:
 
 
 class FakeClient:
-    def __init__(self, resources, tags):
+    """Mimics the Suite API. ``bulk_ok=False`` makes the bulk endpoint fail."""
+
+    def __init__(self, resources, tags, bulk_ok=True):
         self.resources = resources
         self.tags = tags
+        self.bulk_ok = bulk_ok
+        self.calls = []
 
     def paged_post(self, url, key, **kwargs):
         return {"resourceList": self.resources}
 
-    def post(self, url, **kwargs):
-        ids = kwargs["json"]["resourceIds"]
-        return FakeResponse(
-            {
-                "values": [
-                    {
-                        "resourceId": rid,
-                        "property-contents": {
-                            "property-content": [
-                                {
-                                    "statKey": "summary|tag",
-                                    "timestamps": [1],
-                                    "values": [self.tags[rid]],
-                                }
-                            ]
-                        },
-                    }
-                    for rid in ids
-                    if rid in self.tags
-                ]
-            }
-        )
+    def _props(self, rid):
+        props = [{"name": "summary|runtime|powerState", "value": "Powered On"}]
+        if rid in self.tags:
+            props.append({"name": "summary|tag", "value": self.tags[rid]})
+        return {"resourceId": rid, "property": props}
+
+    def get(self, url, **kwargs):
+        self.calls.append(url)
+        if url == "/api/resources/properties":
+            if not self.bulk_ok:
+                return FakeResponse({}, status=404)
+            ids = kwargs["params"]["resourceId"]
+            return FakeResponse(
+                {"resourcePropertiesList": [self._props(rid) for rid in ids]}
+            )
+        rid = url.split("/")[3]
+        return FakeResponse(self._props(rid))
 
 
 class FakeAdapterInstance:
@@ -92,12 +91,12 @@ def properties(obj):
     return {p["key"]: p["stringValue"] for p in obj.get_json()["properties"]}
 
 
-def run(tags, settings=None):
+def run(tags, settings=None, bulk_ok=True):
     resources = [resource(rid, f"vm{rid}") for rid in ["1", "2", "3"]]
-    client = FakeClient(resources, tags)
+    client = FakeClient(resources, tags, bulk_ok)
     s = adapter.Settings(FakeAdapterInstance(settings))
     res = adapter.query_resources(client, s.source_adapter_kind, s.resource_kinds)
-    raw = adapter.get_latest_property(client, list(res.keys()), "summary|tag")
+    raw = adapter.get_property_values(client, list(res.keys()), "summary|tag")
     return {o.get_key().name: properties(o) for o in adapter.build_objects(res, raw, s)}
 
 
@@ -154,3 +153,20 @@ def test_collect_errors_without_suite_api_client():
     instance = FakeAdapterInstance()
     instance.suite_api_client = None
     assert "Suite API" in adapter.collect(instance).get_json()["errorMessage"]
+
+
+def test_fallback_to_per_object_requests_and_html_escaped_values():
+    out = run(
+        {"1": "[&lt;owner-cferber&gt;, &lt;supporttier-gold&gt;]"},
+        {"unset_value": ""},
+        bulk_ok=False,
+    )
+    assert out == {
+        "vm1": {"summary|tag|owner": "cferber", "summary|tag|supporttier": "gold"}
+    }
+
+
+def test_stripped_values_are_skipped():
+    out = run({"1": "[, ]", "2": "[<owner-cferber>]"})
+    assert "vm1" not in out
+    assert out["vm2"] == {"summary|tag|owner": "cferber"}

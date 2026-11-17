@@ -14,6 +14,7 @@ writes one property per tag category back onto the same vCenter objects, e.g.::
 The adapter does not talk to vCenter at all. Everything goes through the VCF
 Operations Suite API, which the collector provides to the adapter automatically.
 """
+import html
 import json
 import sys
 from typing import Any
@@ -37,6 +38,7 @@ from aria.ops.suite_api_client import SuiteApiClient
 from aria.ops.timer import Timer
 from constants import ADAPTER_KIND
 from constants import ADAPTER_NAME
+from tag_parser import is_unparseable
 from tag_parser import parse_list_parameter
 from tag_parser import parse_tags
 from tag_parser import sanitize_key_segment
@@ -192,7 +194,7 @@ def test(adapter_instance: AdapterInstance) -> TestResult:
                     )
                     return result
                 sample = list(resources.keys())[:50]
-                tags = get_latest_property(client, sample, constants.SOURCE_TAG_PROPERTY)
+                tags = get_property_values(client, sample, constants.SOURCE_TAG_PROPERTY)
                 logger.info(
                     f"Found {len(resources)} objects; {len(tags)} of the first "
                     f"{len(sample)} have a '{constants.SOURCE_TAG_PROPERTY}' property."
@@ -221,7 +223,7 @@ def collect(adapter_instance: AdapterInstance) -> CollectResult:
                     client, settings.source_adapter_kind, settings.resource_kinds
                 )
                 logger.info(f"Found {len(resources)} objects in scope")
-                raw_tags = get_latest_property(
+                raw_tags = get_property_values(
                     client, list(resources.keys()), constants.SOURCE_TAG_PROPERTY
                 )
             for obj in build_objects(resources, raw_tags, settings):
@@ -248,6 +250,13 @@ def build_objects(
     the object has no tag in it. That way a removed tag is overwritten instead of
     keeping its last value forever.
     """
+    unparseable = {rid for rid, raw in raw_tags.items() if is_unparseable(raw)}
+    if unparseable:
+        logger.warning(
+            f"{len(unparseable)} objects have a tag value that cannot be parsed, e.g. "
+            f"{raw_tags[next(iter(unparseable))]!r}. These objects are "
+            "skipped."
+        )
     parsed: Dict[str, Dict[str, List[str]]] = {
         resource_id: parse_tags(raw, settings.known_categories, settings.split_mode)
         for resource_id, raw in raw_tags.items()
@@ -258,6 +267,8 @@ def build_objects(
 
     objects: List[Object] = []
     for resource_id, obj in resources.items():
+        if resource_id in unparseable:
+            continue
         categories = parsed.get(resource_id, {})
         written = False
         for category in sorted(all_categories):
@@ -293,53 +304,72 @@ def query_resources(
     return resources
 
 
-def get_latest_property(
+def get_property_values(
     client: SuiteApiClient, resource_ids: List[str], property_key: str
 ) -> Dict[str, str]:
-    """Return ``{resource_id: latest value}`` of one property for many resources."""
+    """Return ``{resource_id: current value}`` of one property for many resources.
+
+    Uses ``GET /api/resources/properties?resourceId=..`` (all properties of several
+    resources per call) and falls back to ``GET /api/resources/{id}/properties`` for
+    resources missing from the bulk answer. The ``properties/latest/query`` endpoint is
+    not used: it strips everything between ``<`` and ``>`` from values, which removes
+    the tag names from ``summary|tag``.
+    """
     values: Dict[str, str] = {}
     batch_size = constants.PROPERTY_QUERY_BATCH_SIZE
     for start in range(0, len(resource_ids), batch_size):
         batch = resource_ids[start : start + batch_size]
-        with client.post(
-            "/api/resources/properties/latest/query",
-            json={
-                "resourceIds": batch,
-                "propertyKeys": [property_key],
-                "instanced": False,
-            },
+        with client.get(
+            "/api/resources/properties", params={"resourceId": batch}
         ) as response:
-            if not response.ok:
-                raise RuntimeError(
-                    f"Property query failed ({response.status_code}): {response.text}"
+            if response.ok:
+                body = json.loads(response.text)
+                for resource_id, name, value in iter_resource_properties(body):
+                    if name == property_key and value is not None:
+                        values[resource_id] = value
+            else:
+                logger.warning(
+                    f"Bulk property request failed ({response.status_code}); "
+                    "falling back to one request per object."
                 )
-            body = json.loads(response.text)
-        for resource_id, key, value in iter_property_values(body):
-            if key == property_key and value is not None:
-                values[resource_id] = value
-    return values
+        for resource_id in batch:
+            if resource_id in values:
+                continue
+            with client.get(f"/api/resources/{resource_id}/properties") as response:
+                if not response.ok:
+                    logger.warning(
+                        f"Property request for {resource_id} failed "
+                        f"({response.status_code})"
+                    )
+                    continue
+                body = json.loads(response.text)
+            for _, name, value in iter_resource_properties(body, resource_id):
+                if name == property_key and value is not None:
+                    values[resource_id] = value
+    return {rid: html.unescape(v) for rid, v in values.items()}
 
 
-def iter_property_values(body: Any) -> Iterable[Tuple[str, str, Optional[str]]]:
-    """Yield ``(resource_id, stat_key, latest_value)`` from a latest-properties response.
+def iter_resource_properties(
+    body: Any, default_resource_id: Optional[str] = None
+) -> Iterable[Tuple[str, str, Optional[str]]]:
+    """Yield ``(resource_id, property_name, value)`` from a resource-properties answer.
 
-    Expected shape::
-
-        {"values": [{"resourceId": "...",
-                     "property-contents": {"property-content": [
-                         {"statKey": "summary|tag", "timestamps": [..], "values": [..]}
-                     ]}}]}
+    Handles a single ``{"resourceId": .., "property": [{"name": .., "value": ..}]}``
+    object as well as any wrapper object holding a list of them.
     """
-    for entry in body.get("values", []) if isinstance(body, dict) else []:
-        resource_id = entry.get("resourceId")
-        # Observed responses use "property-contents"; the API schema says "properties"
-        contents = entry.get("property-contents") or entry.get("properties") or {}
-        if isinstance(contents, dict):
-            contents = contents.get("property-content", [])
-        for content in contents or []:
-            key = content.get("statKey")
-            vals = content.get("values") or content.get("data") or []
-            yield resource_id, key, (str(vals[-1]) if vals else None)
+    if isinstance(body, dict):
+        if isinstance(body.get("property"), list):
+            resource_id = body.get("resourceId") or default_resource_id
+            for prop in body["property"]:
+                if isinstance(prop, dict):
+                    yield resource_id, prop.get("name"), prop.get("value")
+            return
+        for value in body.values():
+            if isinstance(value, (list, dict)):
+                yield from iter_resource_properties(value, default_resource_id)
+    elif isinstance(body, list):
+        for item in body:
+            yield from iter_resource_properties(item, default_resource_id)
 
 
 def get_endpoints(adapter_instance: AdapterInstance) -> EndpointResult:
