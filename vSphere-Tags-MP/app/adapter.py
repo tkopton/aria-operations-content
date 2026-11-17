@@ -171,6 +171,15 @@ def test(adapter_instance: AdapterInstance) -> TestResult:
             if not settings.resource_kinds:
                 result.with_error("At least one object type must be configured.")
                 return result
+            if adapter_instance.suite_api_client is None:
+                # VCF Operations does not pass Suite API credentials when testing an
+                # account that has not been saved yet. The settings are valid, so
+                # let the test pass; collect() reports any Suite API problem.
+                logger.info(
+                    "No Suite API connection available during test; skipping the "
+                    "object query."
+                )
+                return result
             with adapter_instance.suite_api_client as client:
                 resources = query_resources(
                     client, settings.source_adapter_kind, settings.resource_kinds
@@ -202,6 +211,11 @@ def collect(adapter_instance: AdapterInstance) -> CollectResult:
         result = CollectResult()
         try:
             settings = Settings(adapter_instance)
+            if adapter_instance.suite_api_client is None:
+                result.with_error(
+                    "No Suite API connection information was provided to the adapter."
+                )
+                return result
             with adapter_instance.suite_api_client as client:
                 resources = query_resources(
                     client, settings.source_adapter_kind, settings.resource_kinds
