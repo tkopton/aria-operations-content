@@ -1,0 +1,8 @@
+logs
+build
+connections.json
+config.json
+venv-vSphere Tags
+__pycache__/
+.pytest_cache/
+*.pak
