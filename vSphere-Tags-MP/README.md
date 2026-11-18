@@ -21,6 +21,21 @@ by it, or use it in a custom group membership rule.
 
 Built with the [VCF Operations Integration SDK](https://github.com/vmware/vmware-vcf-operations-integration-sdk).
 
+## Quick install (ready-made .pak)
+
+No build needed: download [`pak/vSphereTagsMP_1.0.3.pak`](pak/vSphereTagsMP_1.0.3.pak) and install it.
+
+1. In VCF Operations, go to **Data Sources > Integrations > Repository > Add** and upload the .pak.
+2. Under **Accounts > Add Account**, choose **vSphere Tags**, give it a name, pick the cloud proxy and save.
+   One account per VCF Operations instance is enough.
+3. After one or two collection cycles, open a tagged VM and look under **Summary | tag**.
+
+The .pak contains no adapter code itself. It points to the container image
+`docker.io/tkopton/vsphere-tags-mp@sha256:09ddc48791d3181dcb08b1bd7cb99cce6b95c89b2d53a4305f974a44c9d690a0`,
+which the cloud proxy pulls from Docker Hub when the account starts. The cloud proxy therefore needs
+access to Docker Hub. For air-gapped environments, build your own .pak and image (see Development)
+and push it to a registry your cloud proxy can reach.
+
 ## How it works
 
 * The adapter does **not** connect to vCenter. It only uses the VCF Operations Suite API,
