@@ -6,3 +6,6 @@ venv-vSphere Tags
 __pycache__/
 .pytest_cache/
 *.pak
+
+# ready-made release packages are tracked
+!pak/*.pak
