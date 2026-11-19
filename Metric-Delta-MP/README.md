@@ -91,11 +91,38 @@ adapter instance.
 | `adapterKind` | yes | Adapter kind owning the objects, e.g. `VMWARE`. |
 | `resourceKind` | yes | Object type, e.g. `VirtualMachine`, `HostSystem`. |
 | `metrics` | yes | Stat keys, **case-sensitive**, exactly as the source adapter publishes them. |
-| `maxSampleAgeMinutes` | no | Skip the delta when the newest sample is older than this. Without it, a metric that stopped updating keeps publishing the same delta every cycle. |
+| `maxSampleAgeMinutes` | no | Freshness check on the newest sample, see below. Without it, a metric that stopped updating keeps publishing the same delta every cycle. |
 | `enabled` | no | `false` skips the whole set. Default `true`. The shipped reference file has the `HostSystem` set disabled as an example. |
 
 JSON has no comments, so the reference file carries its notes in a `_comment` key, which
 the adapter ignores. Changes apply on the next collection cycle, no restart needed.
+
+### What `maxSampleAgeMinutes` does
+
+It is a freshness check on the **newest of the two samples**, nothing else. At collection
+time the adapter compares the timestamp of the newest sample with the current time:
+
+```
+now - timestamp(newest sample) > maxSampleAgeMinutes  ->  no value is written
+```
+
+Without the setting there is no such check: a delta is calculated whenever two samples
+exist, however old they are.
+
+Why it matters: when a metric stops being collected, because the VM is powered off, the
+source adapter stopped or the metric was removed from a policy, its last two samples stay
+in the database. The delta is then still calculable, and every cycle would write the same
+number again with a current timestamp. The delta metric would look alive while its source
+is dead. With the setting, the delta simply stops, which is the honest answer.
+
+A sensible value is a little more than the collection interval of the source metric, for
+example 15 minutes for a metric collected every 5 minutes, so one missed cycle does not
+blank the delta.
+
+One thing it does **not** do: it does not limit the gap *between* the two samples. If an
+object was not collected for a day and comes back, the two newest samples can be a day
+apart, and the delta covers that whole gap. The newest sample is fresh, so the check
+passes.
 
 ## Adapter instance settings
 
