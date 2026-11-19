@@ -1,0 +1,19 @@
+name: Metric Delta MP tests
+on:
+  push:
+    paths: ["Metric-Delta-MP/**", ".github/workflows/metric-delta-mp-tests.yml"]
+  pull_request:
+    paths: ["Metric-Delta-MP/**", ".github/workflows/metric-delta-mp-tests.yml"]
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Metric-Delta-MP
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r adapter_requirements.txt pytest
+      - run: python -m pytest -q tests

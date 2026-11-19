@@ -1,0 +1,11 @@
+logs
+build
+connections.json
+config.json
+venv-Metric Delta Adapter
+__pycache__/
+.pytest_cache/
+*.pak
+
+# ready-made release packages are tracked
+!pak/*.pak
