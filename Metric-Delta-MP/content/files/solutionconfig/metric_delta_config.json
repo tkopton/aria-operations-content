@@ -1,0 +1,31 @@
+{
+  "_comment": [
+    "REFERENCE FILE - DO NOT EDIT, CLONE IT. It is overwritten on Management Pack upgrade.",
+    "Clone it in Configurations > Management Packs Configuration and enter the clone's name in the adapter instance.",
+    "metricSets[].adapterKind / resourceKind: object type, e.g. VMWARE / VirtualMachine",
+    "metricSets[].metrics: case-sensitive stat keys, e.g. cpu|usage_average",
+    "metricSets[].maxSampleAgeMinutes (optional): skip the delta if the newest sample is older",
+    "metricSets[].enabled (optional, default true)",
+    "Result metric: <Metric Group>|<stat key>, default group 'Custom Metrics|Delta'. Nothing is stored if fewer than two samples exist."
+  ],
+  "metricSets": [
+    {
+      "adapterKind": "VMWARE",
+      "resourceKind": "VirtualMachine",
+      "maxSampleAgeMinutes": 15,
+      "metrics": [
+        "disk|usage_average",
+        "net|usage_average"
+      ]
+    },
+    {
+      "adapterKind": "VMWARE",
+      "resourceKind": "HostSystem",
+      "enabled": false,
+      "metrics": [
+        "cpu|usage_average",
+        "mem|usage_average"
+      ]
+    }
+  ]
+}
